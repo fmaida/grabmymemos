@@ -10,7 +10,7 @@ if __name__ == "__main__":
                token=Path.home() / ".config" / "grabmymemos" / "memos.token")
     gmm.always_force_a_title()
     gmm.wrap_titles_at(length=30)
-    
+
     list_of_memos = gmm.fetch_all()
 
     for memo in list_of_memos:

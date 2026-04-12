@@ -1,6 +1,6 @@
 [project]
 name = "grabmymemos"
-version = "0.1.2"
+version = "0.1.3"
 description = "A minimal Python wrapper for the Memos API, providing simple read-only access to your notes."
 authors = [
     {name = "Francesco Maida",email = "francesco.maida@gmail.com"}

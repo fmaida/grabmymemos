@@ -1,4 +1,4 @@
-# v0.1.1 – 12/04/2026
+# v0.1.3 – 12/04/2026
 
 from pathlib import Path
 import datetime
@@ -122,7 +122,8 @@ def fetch(limit: int = 6, tags: list[str] = None) -> list[dict]:
             temp["update_time"] = _convert_date(memo["updateTime"])
             temp["title"] = _extract_title(memo["content"])
             if config.force_a_title and not temp["title"]:
-                temp["title"] = textwrap.shorten(memo["content"], width=30, placeholder="..")
+                temp_width = 160 if config.wrap_titles_at < 1 else config.wrap_titles_at
+                temp["title"] = textwrap.shorten(memo["content"], width=temp_width, placeholder="..")
             if config.wrap_titles_at > 0 and temp["title"]:
                 temp["title"] = textwrap.shorten(temp["title"], width=config.wrap_titles_at, placeholder="..")
             temp["content"] = memo["content"]
