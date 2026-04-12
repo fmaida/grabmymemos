@@ -1,16 +1,19 @@
 from pathlib import Path
 import textwrap
-from grabmymemos import config, fetch_all
+import grabmymemos as gmm
 
 
 if __name__ == "__main__":
 
     # ––– Parametri globali –––
-    config(base_url="https://memos.cesco.it",
-           token=Path.home() / ".config" / "grabmymemos" / "memos.token")
-    dati = fetch_all()
+    gmm.config(base_url="https://memos.cesco.it",
+               token=Path.home() / ".config" / "grabmymemos" / "memos.token")
+    gmm.always_force_a_title()
+    gmm.wrap_titles_at(length=30)
+    
+    list_of_memos = gmm.fetch_all()
 
-    for memo in dati:
+    for memo in list_of_memos:
         date = memo["display_time"].strftime("%d/%m/%Y %H:%M")
         truncated = textwrap.shorten(memo["content"], width=60, placeholder="...")
         title = memo["title"] if memo["title"] else truncated

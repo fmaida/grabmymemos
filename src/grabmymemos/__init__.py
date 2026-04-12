@@ -27,6 +27,16 @@ def get_config() -> ConfigClass:
 
 # _____________________________________________________________________________
 
+def always_force_a_title() -> None:
+    _CONFIG.force_a_title = True
+
+# _____________________________________________________________________________
+
+def wrap_titles_at(length: int) -> None:
+    _CONFIG.wrap_titles_at = length
+
+# _____________________________________________________________________________
+
 def _extract_title(content) -> str|None:
     first_line = content.split("\n")[0].strip()
     if first_line.startswith("#"):
