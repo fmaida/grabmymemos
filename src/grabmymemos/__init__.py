@@ -1,4 +1,4 @@
-# v1.0 – 26/03/2026
+# v0.1.1 – 12/04/2026
 
 from pathlib import Path
 import datetime
@@ -79,11 +79,11 @@ def _get_attachments(memo) -> tuple[list[dict], str|None]:
 
 def reset() -> None:
     config = get_config()
-    config.reset_last_fetched_page = None
+    config.last_fetched_page = None
 
 # _____________________________________________________________________________
 
-def fetch(limit: int = 6) -> list[dict]:
+def fetch(limit: int = 6, tags: list[str] = None) -> list[dict]:
     """
     Elenca tutte le note di un server Memos
     """
@@ -91,14 +91,17 @@ def fetch(limit: int = 6) -> list[dict]:
     config = get_config()
 
     output = []
-    # da qui in poi tutte le chiamate includono automaticamente il token
+    # Da qui in poi tutte le chiamate includono automaticamente il token
     params = {"pageSize": limit, "filter": "visibility == 'PUBLIC'"}
+    # Se sono stati passati dei tag specifici per la ricerca
+    if tags:
+        temp = " || ".join(f'"{tag}" in tags' for tag in tags)
+        params["filter"] += f" && ({temp})"
     if config.last_fetched_page is not None:
         params["pageToken"] = config.last_fetched_page
     response = config.session.get(f"{config.base_url}/api/v1/memos",
                                   params=params)
     if response.status_code == 200:
-        # print(json.dumps(response.json(), indent=2))
         dati = response.json()
         for memo in dati["memos"]:
             attachments, image = _get_attachments(memo)
@@ -130,11 +133,11 @@ def fetch(limit: int = 6) -> list[dict]:
 
 # _____________________________________________________________________________
 
-def fetch_all() -> list[dict]:
+def fetch_all(tags: list[str] = None) -> list[dict]:
     reset()
     output = []
     while True:
-        chunk = fetch()
+        chunk = fetch(limit=20, tags=tags)
         output += chunk
         if not get_config().last_fetched_page:
             break

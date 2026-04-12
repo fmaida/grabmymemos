@@ -11,17 +11,17 @@ if __name__ == "__main__":
     dati = fetch_all()
 
     for memo in dati:
-        data = memo["display_time"].strftime("%d/%m/%Y %H:%M")
-        troncato = textwrap.shorten(memo["content"], width=60, placeholder="...")
-        titolo = memo["title"] if memo["title"] else troncato
+        date = memo["display_time"].strftime("%d/%m/%Y %H:%M")
+        truncated = textwrap.shorten(memo["content"], width=60, placeholder="...")
+        title = memo["title"] if memo["title"] else truncated
         print(f"ID: \"{memo['name']}\"")
-        print(f"[{data}]  {titolo}")
+        print(f"[{date}]  {title}")
         if memo["attachments"]:
-            print("  contiene:")
-            for allegato in memo["attachments"]:
-                print(f"    – {allegato}")
+            print("  contains:")
+            for attachment in memo["attachments"]:
+                print(f"    – {attachment}")
         else:
-            print("  (senza allegati)")
+            print("  (no attachments)")
         if memo["image"]:
             print(f"  image:")
             print(f"    – {memo['image']}")
